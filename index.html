@@ -3,60 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Quản lý thiết bị điện tử</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background: #f4f6f8;
-        padding: 20px;
-    }
-
-    h2 {
-        margin-bottom: 15px;
-    }
-
-    button {
-        padding: 8px 12px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .add {
-        background: #2563eb;
-        color: white;
-        margin-bottom: 15px;
-    }
-
-    table {
-        width: 100%;
-        background: white;
-        border-collapse: collapse;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    th, td {
-        padding: 12px;
-        text-align: center;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    th {
-        background: #e2e8f0;
-    }
-
-    .edit {
-        background: #facc15;
-    }
-
-    .delete {
-        background: #ef4444;
-        color: white;
-    }
-</style>
+<link rel="stylesheet" href="quanly.css">
 </head>
 <body>
-
+<div class="container">
 <h2>Trang quản lý thiết bị điện tử</h2>
 
 <button class="add" onclick="addDevice()">+ Thêm thiết bị</button>
@@ -71,6 +21,7 @@
         <th>Thao tác</th>
     </tr>
 </table>
+</div>
 
 <script>
 function formatPrice(price) {
