@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Quản lý thiết bị điện tử</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        padding: 20px;
+    }
+
+    h2 {
+        margin-bottom: 15px;
+    }
+
+    button {
+        padding: 8px 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .add {
+        background: #2563eb;
+        color: white;
+        margin-bottom: 15px;
+    }
+
+    table {
+        width: 100%;
+        background: white;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 12px;
+        text-align: center;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    th {
+        background: #e2e8f0;
+    }
+
+    .edit {
+        background: #facc15;
+    }
+
+    .delete {
+        background: #ef4444;
+        color: white;
+    }
+</style>
+</head>
+<body>
+
+<h2>Trang quản lý thiết bị điện tử</h2>
+
+<button class="add" onclick="addDevice()">+ Thêm thiết bị</button>
+
+<table id="deviceTable">
+    <tr>
+        <th>Tên thiết bị</th>
+        <th>Loại</th>
+        <th>Hãng</th>
+        <th>Giá (VNĐ)</th>
+        <th>Tình trạng</th>
+        <th>Thao tác</th>
+    </tr>
+</table>
+
+<script>
+function formatPrice(price) {
+    return Number(price).toLocaleString("vi-VN");
+}
+
+function addDevice() {
+    let name = prompt("Nhập tên thiết bị:");
+    if (!name) return;
+
+    let type = prompt("Nhập loại (Console / Điện thoại):");
+    let brand = prompt("Nhập hãng:");
+    let price = prompt("Nhập giá (VNĐ):");
+    let status = prompt("Nhập tình trạng (Hoạt động / Hỏng):");
+
+    let table = document.getElementById("deviceTable");
+    let row = table.insertRow();
+
+    row.insertCell(0).innerText = name;
+    row.insertCell(1).innerText = type;
+    row.insertCell(2).innerText = brand;
+    row.insertCell(3).innerText = formatPrice(price);
+    row.insertCell(4).innerText = status;
+
+    let actionCell = row.insertCell(5);
+    actionCell.innerHTML = `
+        <button class="edit" onclick="editDevice(this)">Sửa</button>
+        <button class="delete" onclick="deleteDevice(this)">Xóa</button>
+    `;
+}
+
+function deleteDevice(btn) {
+    if (confirm("Bạn có chắc muốn xóa thiết bị này không?")) {
+        let row = btn.parentElement.parentElement;
+        row.remove();
+    }
+}
+
+function editDevice(btn) {
+    let row = btn.parentElement.parentElement;
+
+    let name = prompt("Sửa tên thiết bị:", row.cells[0].innerText);
+    let type = prompt("Sửa loại:", row.cells[1].innerText);
+    let brand = prompt("Sửa hãng:", row.cells[2].innerText);
+    let price = prompt("Sửa giá (VNĐ):", row.cells[3].innerText.replace(/\D/g,""));
+    let status = prompt("Sửa tình trạng:", row.cells[4].innerText);
+
+    if (name) row.cells[0].innerText = name;
+    if (type) row.cells[1].innerText = type;
+    if (brand) row.cells[2].innerText = brand;
+    if (price) row.cells[3].innerText = formatPrice(price);
+    if (status) row.cells[4].innerText = status;
+}
+</script>
+
+</body>
+</html>
