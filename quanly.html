@@ -2,16 +2,23 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Quản lý thiết bị điện tử</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Danh sách thiết bị điện tử</title>
 <link rel="stylesheet" href="quanly.css">
 </head>
 <body>
 <div class="container">
-<h2>Trang quản lý thiết bị điện tử</h2>
+<div class="header-bar">
+    <h2>Danh sách thiết bị điện tử</h2>
+    <div class="user-info">
+        <span class="username">Xin chào</span>
+        <a href="menu.html" class="btn-back">← Về menu</a>
+        <button class="btn-logout" onclick="handleLogout()">Đăng xuất</button>
+    </div>
+</div>
 
 <div class="toolbar">
     <input type="text" id="searchBar" class="search-bar" placeholder="Tìm kiếm thiết bị, loại, hãng..." oninput="filterTable()">
-    <button class="add" onclick="addDevice()">+ Thêm thiết bị</button>
 </div>
 
 <table id="deviceTable">
@@ -21,46 +28,39 @@
         <th>Hãng</th>
         <th>Giá (VNĐ)</th>
         <th>Tình trạng</th>
-        <th>Thao tác</th>
     </tr>
 </table>
 </div>
 
+<script src="auth.js"></script>
+<script src="devices.js"></script>
 <script>
-function formatPrice(price) {
-    return Number(price).toLocaleString("vi-VN");
-}
+// Kiểm tra đăng nhập - nếu admin thì chuyển sang admin
+const user = requireAuth(false);
 
-function addDevice() {
-    let name = prompt("Nhập tên thiết bị:");
-    if (!name) return;
-
-    let type = prompt("Nhập loại (Console / Điện thoại):");
-    let brand = prompt("Nhập hãng:");
-    let price = prompt("Nhập giá (VNĐ):");
-    let status = prompt("Nhập tình trạng (Hoạt động / Hỏng):");
-
-    let table = document.getElementById("deviceTable");
-    let row = table.insertRow();
-
-    row.insertCell(0).innerText = name;
-    row.insertCell(1).innerText = type;
-    row.insertCell(2).innerText = brand;
-    row.insertCell(3).innerText = formatPrice(price);
-    row.insertCell(4).innerText = status;
-
-    let actionCell = row.insertCell(5);
-    actionCell.innerHTML = `
-        <button class="edit" onclick="editDevice(this)">Sửa</button>
-        <button class="delete" onclick="deleteDevice(this)">Xóa</button>
-    `;
-}
-
-function deleteDevice(btn) {
-    if (confirm("Bạn có chắc muốn xóa thiết bị này không?")) {
-        let row = btn.parentElement.parentElement;
-        row.remove();
+// Tải danh sách thiết bị
+document.addEventListener('DOMContentLoaded', function() {
+    const devices = getDevices();
+    const table = document.getElementById("deviceTable");
+    devices.forEach(d => {
+        const row = table.insertRow();
+        row.insertCell(0).innerText = d.name;
+        row.insertCell(1).innerText = d.type;
+        row.insertCell(2).innerText = d.brand;
+        row.insertCell(3).innerText = formatPrice(d.price);
+        row.insertCell(4).innerText = d.status;
+    });
+});
+if (user) {
+    document.querySelector('.username').textContent = 'Xin chào, ' + user.username;
+    if (user.isAdmin) {
+        window.location.href = 'admin.html';
     }
+}
+
+function handleLogout() {
+    logout();
+    window.location.href = 'dangnhap.html';
 }
 
 function filterTable() {
@@ -81,23 +81,6 @@ function filterTable() {
         row.style.display = found || !query ? "" : "none";
     }
 }
-
-function editDevice(btn) {
-    let row = btn.parentElement.parentElement;
-
-    let name = prompt("Sửa tên thiết bị:", row.cells[0].innerText);
-    let type = prompt("Sửa loại:", row.cells[1].innerText);
-    let brand = prompt("Sửa hãng:", row.cells[2].innerText);
-    let price = prompt("Sửa giá (VNĐ):", row.cells[3].innerText.replace(/\D/g,""));
-    let status = prompt("Sửa tình trạng:", row.cells[4].innerText);
-
-    if (name) row.cells[0].innerText = name;
-    if (type) row.cells[1].innerText = type;
-    if (brand) row.cells[2].innerText = brand;
-    if (price) row.cells[3].innerText = formatPrice(price);
-    if (status) row.cells[4].innerText = status;
-}
 </script>
-
 </body>
 </html>
