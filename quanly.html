@@ -9,7 +9,10 @@
 <div class="container">
 <h2>Trang quản lý thiết bị điện tử</h2>
 
-<button class="add" onclick="addDevice()">+ Thêm thiết bị</button>
+<div class="toolbar">
+    <input type="text" id="searchBar" class="search-bar" placeholder="Tìm kiếm thiết bị, loại, hãng..." oninput="filterTable()">
+    <button class="add" onclick="addDevice()">+ Thêm thiết bị</button>
+</div>
 
 <table id="deviceTable">
     <tr>
@@ -57,6 +60,25 @@ function deleteDevice(btn) {
     if (confirm("Bạn có chắc muốn xóa thiết bị này không?")) {
         let row = btn.parentElement.parentElement;
         row.remove();
+    }
+}
+
+function filterTable() {
+    let query = document.getElementById("searchBar").value.toLowerCase().trim();
+    let table = document.getElementById("deviceTable");
+    let rows = table.getElementsByTagName("tr");
+
+    for (let i = 1; i < rows.length; i++) {
+        let row = rows[i];
+        let cells = row.getElementsByTagName("td");
+        let found = false;
+        for (let j = 0; j < cells.length; j++) {
+            if (cells[j].innerText.toLowerCase().includes(query)) {
+                found = true;
+                break;
+            }
+        }
+        row.style.display = found || !query ? "" : "none";
     }
 }
 
